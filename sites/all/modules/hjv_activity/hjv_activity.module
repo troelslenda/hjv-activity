@@ -1,0 +1,86 @@
+<?php 
+
+function hjv_activity_menu(){
+    $items['node/add/activity/guid'] = array(
+    'page callback' => 'hjv_activity_add_activity_from_guid',
+    'title' => t('Add activity tracker'),
+    'access arguments' => array('administer site configuration'),
+  );
+  return $items;
+}
+
+function hjv_activity_add_activity_from_guid(){
+  return drupal_get_form('hjv_activity_add_activity_form');
+}
+
+
+function hjv_activity_add_activity_form($form_state){
+  $form = array();
+  $form['guid'] = array(
+    '#title' => t('Identifier'),
+    '#type' => 'textfield',
+    '#maxlength' => 1000,
+    '#description' => t('Indtast et link indeholdende GUID for aktiviteten. <a rel="lightvideo[|width:1035px; height:665px;]" href="/sites/default/files/2010-10-24_1728.swf">Se video</a> for instruktion.'),
+  );
+    $form['mandatory'] = array(
+    '#type' => 'checkbox',
+    '#title' => ('Afsend tilmeldings reminder'),
+    '#description' => t('Hvis feltet er valgt vil der med ekspontentiel frekvens blive afsendt emails (måske sms\'er) til restanter!'),
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Tilføj aktivitet'),
+   );
+  $form['#validate'] = array('hjv_activity_add_validate');
+  $form['#submit'] = array('hjv_activity_add_submit');
+  
+  return $form;
+}
+
+function hjv_activity_add_submit($form,&$form_state){
+  preg_match('/[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}/i', $form_state['values']['guid'],$results);
+  
+  $node = new StdClass();
+  
+  $node->field_guid[0]['value'] = $results[0];
+  $node->type = 'activity';
+  $node->title = 'awaiting update';
+  $node->status = 1;
+  node_save($node);
+  
+  $fields = array(
+  	'type' => 'activity',
+    'aid' => $node->nid,
+    'updatetime' => 100 
+  );
+  drupal_write_record('hjv_auth_scrape_queue',$fields);
+  $fields['type'] = 'participant';
+  drupal_write_record('hjv_auth_scrape_queue',$fields);
+  
+  
+  
+  drupal_set_message('Aktiviten er oprettet. Der kan gå et par minutter inden den bliver hentet fra hjv.dk');
+  return true;
+}
+
+function hjv_activity_add_validate($form,&$form_state){
+  
+  // check wether link contains a valid GUID
+  if (!(preg_match('/[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}/i', $form_state['values']['guid'],$results))) {
+    form_set_error('guid',t('Du er nødt til at indsætte et link indeholdende GUID. Har du problemer så <a rel="lightvideo[|width:599px; height:474px;]" href="/sites/default/files/2010-10-24_1728.swf">se instruksions videoen</a>'));
+  }
+
+  // check wether GUID already exist in activity
+  if(node_load_from_guid($results[0])){
+    form_set_error('guid',t('Aktiviteten med GUID=%guid findes allerede i systemet!',array('%guid' => $results[0])));
+  }
+  
+
+}
+
+function node_load_from_guid($guid){
+  $res = db_query('SELECT nid FROM {content_type_activity} WHERE field_guid_value = "'.$guid.'"');
+  return node_load(db_result($res));
+}
+
+?>

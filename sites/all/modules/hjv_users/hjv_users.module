@@ -1,0 +1,188 @@
+<?php 
+
+function hjv_auth_scrape_user_register_form($form_state,$users){
+  
+  $form = user_register();
+  
+  $roles = $form['account']['roles'];
+  
+  dsm($form);
+  
+  
+  $form = array();
+  
+  foreach($users as $ma_number => $u){
+    
+    $form['users'][$ma_number]['ignore'] = array(
+      '#type' => 'checkbox',
+    );
+    $form['users'][$ma_number]['roles'] = $roles;
+    
+    $form['users'];
+    
+    
+    #$form = drupal_get_form('hjv_auth_scrape_user_register_form',$u);
+    
+    #$rows[] = array(drupal_render($form['users'][$ma_number]['add']),$u['ma_number'], $u['name'],$u['phone'],findSuitableUsername($u['name']),$u['unit'],,$u['function']);
+  }
+  
+ 
+  return $form;
+  
+return theme('table',array('','Employee number','Name','Phone','Username','Unit','Roles','Function'),$rows);
+ 
+  
+  
+  
+  #dsm($form);
+  
+  
+  return $form;
+  
+  #return user_register_form($form_state);  
+  
+  #dsm($row);
+}
+
+function hjv_users_menu(){
+    $items['user/add_soldiers'] = array(
+    'page callback' => 'hjv_auth_scrape_add_soldiers',
+    'title' => 'Add users from storage',
+    'access arguments' => array('administer site configuration'),
+  );
+  return $items;
+}
+
+
+function hjv_auth_scrape_form_alter(&$form,&$form_state,$form_id){
+  #var_dump($form_id);
+  if($form_id != 'activity_node_form'){
+    return;
+  }
+}
+
+function hjv_auth_scrape_add_soldiers(){
+  
+  #variable_set('temp_users',serialize(array()));
+  
+  $users = unserialize(variable_get('temp_users',''));
+  
+  #return drupal_get_form('hjv_auth_scrape_user_register_form',$users);
+  
+  
+  
+  foreach($users as $u){
+    
+ #   $form = drupal_get_form('hjv_auth_scrape_user_register_form',$u);
+    
+    $rows[] = array('<input type="submit" value="Tilføj" /><input type="submit" value="Ignorer" />',$u['ma_number'], $u['name'],$u['phone'],findSuitableUsername($u['name']),$u['unit'],drupal_render($roles),$u['function']);
+  }
+return theme('table',array('','Employee number','Name','Phone','Username','Unit','Roles','Function'),$rows);
+  
+}
+
+function hjv_users_block($op = 'list', $delta = 0, $edit = array()) {
+  if ($op == 'list') {
+    return array(
+    #0 => array('info' => t('Test block'), 'cache' => BLOCK_NO_CACHE),
+    1 => array('info' => t('Didn\'t signup yet'), 'cache' => BLOCK_NO_CACHE),
+    );
+  }
+  elseif ($op == 'view') {
+    switch ($delta) {
+      case 0:
+        
+        module_load_include('php', 'hjv_auth_scrape', 'HJVformatMISC.class');
+        
+        /*$datestr = array('19 OKT 10 1900-2100 ',
+        '05 NOV 10 1900 - 07 NOV 10 1700 ');
+        
+        foreach($datestr as $date){
+
+          list($start,$end) = HJVformatMISC::getStartAndEndTime($date);
+          
+          $out[]= format_date($start,'long');
+          
+          $out[]= '<hr />';
+          
+          $out[]= format_date($end,'long');
+          
+        }*/
+        #var_dump(serialize(array()));
+      #  variable_set('temp_users',serialize(array()));
+       
+
+        #var_dump($u);
+        
+        
+        #var_dump(user_load(array('profile_nanumber' => '367901')));
+        return $block;  
+        break;
+      case 1:
+        
+        $node = node_load(arg(1));
+        
+        if($node->type != 'activity'){
+          return;
+        }
+        
+        $res = db_query('SELECT uid FROM users WHERE uid != 0');
+        while($row = db_fetch_array($res)){
+          $users[] = $row;
+        }
+
+        
+        
+        #var_dump($node);
+        
+        
+        foreach($users as $user){
+          if(!in_array($user,$node->field_attendees)){
+            $not[] = $user;
+          }
+          else{
+            $signed[] = $user;
+          }
+        }
+        foreach($not as $n){
+         if(!in_array($n,$node->field_absentees)){
+            $notsigned[] = $n;
+          }
+          else{
+            $notcomming[] = $n;
+          }
+        }
+      /* var_dump($signed);
+        print '<hr />';
+        var_dump($not);
+        print '<hr />';
+        var_dump($notsigned);
+        print '<hr />';
+        var_dump($notcomming);*/
+        
+        $procent = sizeof($signed) / sizeof($users) * 100;
+        
+        $ialtprocent = (sizeof($signed)+sizeof($notsigned)) / sizeof($users) * 100;
+
+        $out = t('Der er tilmeldt !tilmeldtprocent%. Hvis restanterne ikke melder fra bliver det !ialtprocent%',array('!tilmeldtprocent' => $procent, '!ialtprocent' => $ialtprocent));
+        
+        $users = array();
+        
+        foreach($notsigned as $notsigneduser){
+          $user = user_load($notsigneduser['uid']);
+          $users[] = theme('username',$user);
+        }
+        
+        $list = theme('item_list',$users);
+        
+        $block['subject'] = t('Restanter');
+        $block['content'] = '<p>'.t('Følgende brugere har endnu ikke angivet om de deltager eller ej').'</p>'.$list.'<p>'.$out.'</p>';
+        return $block;
+    }
+  }
+}
+
+
+
+
+?>

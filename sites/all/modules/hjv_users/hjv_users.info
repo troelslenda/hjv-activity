@@ -1,0 +1,5 @@
+; $Id$
+name = HJV.dk Users
+description = Provides blocks and functions to handle users 
+core = 6.x
+php = 5.2

@@ -1,0 +1,7 @@
+; $Id: $
+name = Soldat
+description = Soldat skabelon
+core = 6.x
+engine = phptemplate
+stylesheets[all][] = styles.css
+base theme = garland
