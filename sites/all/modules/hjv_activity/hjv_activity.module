@@ -4,7 +4,7 @@ function hjv_activity_menu(){
     $items['node/add/activity/guid'] = array(
     'page callback' => 'hjv_activity_add_activity_from_guid',
     'title' => t('Add activity tracker'),
-    'access arguments' => array('administer site configuration'),
+    'access arguments' => array('create activity content'),
   );
   return $items;
 }
