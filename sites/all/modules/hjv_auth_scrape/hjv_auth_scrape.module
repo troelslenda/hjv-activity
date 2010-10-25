@@ -1,0 +1,201 @@
+<?php
+
+function hjv_auth_scrape_menu(){
+  $items = array();
+  $items['admin/settings/hjv_auth_scrape'] = array(
+    'title' => 'HJV.dk',
+    'description' => t('Settings for HJV.dk'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'admin.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hjv_auth_scrape_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'weight' => 1,
+  );
+  return $items;
+}
+
+
+/*
+ * implementation of hook_cron();
+ */
+function hjv_auth_scrape_cron(){
+  
+  if(variable_get('hjv_username','xxxxxx') == 'xxxxxx' || variable_get('hjv_password','xxxxxx') == 'xxxxxx'){
+    watchdog('error',t('You need to set Employee number and password inorder for cron to run'));
+    return;
+  }
+  
+  module_load_include('php', 'hjv_auth_scrape', 'HJVAuthScrape.class');
+  module_load_include('php', 'hjv_auth_scrape', 'HJVformatMISC.class');
+  
+  $node = hjv_auth_scrap_get_next_activity_for_update();
+  
+ # $node = node_load($record['aid']);
+  
+  
+  if(!$node){
+    watchdog('hjv',t('Nothing to update'));
+    return;
+  }
+  
+  #var_dump($node);
+  
+  // validate GUID
+  if (!(preg_match('/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/i', $node->field_guid[0]['value']))) {
+    watchdog('error',t('The guid %guid in activity %nid was not valid',array('%nid' => $node->nid,'%guid' => $node->field_guid[0]['value'])));
+    return;
+  }
+  
+  $curlObj = new HJVAuthScrape($node->field_guid[0]['value']);
+  $curlObj->authorize(variable_get('hjv_username','xxxxxx'),variable_get('hjv_password','xxxxxx'));
+  
+  switch($record['type']){
+    case 'activity':
+      $activityRAW = $curlObj->getActivityRAW();
+      $formatteddata = HJVformatMISC::formatActivityData($activityRAW);
+      break;
+    case 'participant':
+      $participantsRAW = $curlObj->getActivityParticipantsRAW();
+      $formatteddata = HJVformatMISC::formatParticipantData($participantsRAW);
+      break;
+  }
+  if(hjv_auth_scrape_update_activity($node,$formatteddata,$record['type'])){
+    node_save($node);
+    watchdog('status',t('Activity %name (%type) was updated',array('%name' => $node->title,'%type' => $record['type'])));
+  }
+}
+function hjv_auth_scrape_update_activity(&$node,$ua,$type){
+  $update = false;
+  if($node->title != $ua['title'] && $ua['title']){
+    $node->title = $ua['title'];
+    $update = true;
+  }
+  if($node->field_goal[0]['value'] != $ua['description'] && $ua['description']){
+    $node->field_goal[0]['value'] = $ua['description'];
+    $update = true;
+  }
+  if($node->field_notes[0]['value'] != $ua['notes'] && $ua['notes']){
+    $node->field_notes[0]['value'] = $ua['notes'];
+    $update = true;  
+  }
+  if($node->field_location[0]['value'] != $ua['location'] && $ua['location']){
+    $node->field_location[0]['value'] = $ua['location'];
+    $update = true;  
+  }
+  #TODO : fix this with time, not working properly
+  if($ua['time']){
+    list($start,$end) = HJVformatMISC::getStartAndEndTime($ua['time']);
+    
+    if($node->field_duration[0]['value'] != $start){
+      $node->field_duration[0]['value'] = format_date($start,'small');// start time event
+      $update = true;  
+    }
+    if($node->field_duration[0]['value2'] != $end){
+      $node->field_duration[0]['value2'] = format_date($end,'small');// end time event
+      $update = true;
+    }
+  }
+  #var_dump($ua);
+  if($type == 'participant'){
+    
+    #read stored users
+    $stored_users = unserialize(variable_get('temp_users',''));
+    
+    foreach($ua as $person){
+      #checkif exists
+      $res = db_query('SELECT u.uid FROM profile_fields AS f LEFT JOIN profile_values as v ON f.fid = v.fid LEFT JOIN users as u ON v.uid = u.uid WHERE f.name = "profile_manumber" and v.value = %d',$person['ma_number']);
+      $u = user_load(db_result($res));
+  
+      if($u){        
+        // update user info if nessecary
+        hjv_auth_scrape_update_user_info($person,$u);
+        
+        if($person['signedup'] == 'Tilmeldt'){
+          $exist = false;
+          foreach($node->field_attendees as $registered){
+            if($registered['uid'] == $u->uid){
+              //already registered
+              $exist = true;
+            }
+          }
+          if(!$exist){
+            $node->field_attendees[]['uid'] = $u->uid;
+            $update = true;
+          }
+        }
+        else{
+          // signed off absent
+          $exist = false;
+          foreach($node->field_absentees as $registered){
+            if($registered['uid'] == $u->uid){
+              //already registered
+              $exist = true;
+            }
+          }
+          if(!$exist){
+            $node->field_absentees[]['uid'] = $u->uid;
+            $update = true;
+          }
+        }
+      }
+      else{
+        $stored_users[$person['ma_number']] = $person;
+      }
+    }
+    variable_set('temp_users',serialize($stored_users));
+  }
+  
+  
+    
+  // always update record when fetched from hjv.dk for testing purposes
+  #return true;
+  return $update;
+}
+
+//getNextActivityforUpdate
+
+function hjv_auth_scrap_get_next_activity_for_update(){
+  $res = db_query('SELECT * FROM {hjv_auth_scrape_queue} WHERE updatetime < UNIX_TIMESTAMP() ORDER BY updatetime ASC LIMIT 0,1');
+  $row = db_fetch_array($res);
+  $node = node_load($row['aid']);
+  
+  
+  if(!$node){
+    return;
+  }
+  
+  $updateFields = array(
+  	'aid' => $row['aid'],
+  	'type' => $row['type'],
+  	'updatetime' => time()+(variable_get('hjv_'.$row['type'].'_update_frequency','')*60*60),
+  );
+  $where = array('aid','type');
+  # TODO: Only put in queue if the activity didnt pass (data not avalible here)
+  
+   $timestamp = date_convert($node->field_duration[0]['value'], DATE_ISO, DATE_UNIX);
+  
+  // the event is not over. Write a new update in queue
+  if($timestamp > time()){
+    drupal_write_record('hjv_auth_scrape_queue',$updateFields,$where);
+  }
+  else{
+    db_query('DELETE FROM {hjv_auth_scrape_queue} WHERE aid = '.$row['aid'].' AND type ="'.$row['type'].'"');
+    watchdog('hjv','Activity !aid is no longer in queue',array('!aid' => $row['aid']));
+  }
+  return $node;
+}
+function hjv_auth_scrape_update_user_info($arr,$u){
+  
+  #$u->mail = $arr['mail'];
+  user_save($u);
+  $data['profile_function'] = $arr['function'];
+  $data['profile_manumber'] = $arr['ma_number'];
+  user_save($u, $data, 'Soldier Info');
+  $data['profile_fullname'] = $arr['name'];
+  $data['profile_phone'] = $arr['phone'];
+  user_save($u, $data, 'Personal Info');
+  
+}
+
+?>
