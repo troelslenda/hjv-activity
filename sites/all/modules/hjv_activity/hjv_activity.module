@@ -20,7 +20,7 @@ function hjv_activity_add_activity_form($form_state){
     '#title' => t('Identifier'),
     '#type' => 'textfield',
     '#maxlength' => 1000,
-    '#description' => t('Indtast et link indeholdende GUID for aktiviteten. <a rel="lightvideo[|width:1035px; height:665px;]" href="/sites/default/files/2010-10-24_1728.swf">Se video</a> for instruktion.'),
+    '#description' => t('Indtast et link indeholdende GUID for aktiviteten. <a rel="lightvideo[|width:599px; height:474px;]" href="/sites/default/files/2010-10-24_1728.swf">Se video</a> for instruktion.'),
   );
     $form['mandatory'] = array(
     '#type' => 'checkbox',
