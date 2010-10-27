@@ -3,7 +3,7 @@
 
 
 
-/*function soldat_username($object) {
+function soldat_username($object) {
 
  # dsm($object);
   
@@ -13,7 +13,12 @@
       $name = drupal_substr($object->name, 0, 15) .'...';
     }
     else {
-      $name = $object->profile_fullname.' ('.$object->profile_function.')';
+      if($name = $object->profile_callsign){
+        $parts = explode(' ',$object->profile_fullname);
+        $firstname = $parts[0];
+        $parts = array_reverse($parts);
+        $name = $firstname[0].'. '.$parts[0];  
+      }
     }
 
     if (user_access('access user profiles')) {
@@ -42,7 +47,7 @@
   }
 
   return $output;
-}*/
+}
 
 
 
