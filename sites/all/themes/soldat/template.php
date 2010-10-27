@@ -13,7 +13,7 @@ function soldat_username($object) {
       $name = drupal_substr($object->name, 0, 15) .'...';
     }
     else {
-      if($name = $object->profile_callsign){
+      if(!($name = $object->profile_callsign)){
         $parts = explode(' ',$object->profile_fullname);
         $firstname = $parts[0];
         $parts = array_reverse($parts);
