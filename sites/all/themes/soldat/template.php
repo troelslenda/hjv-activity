@@ -3,7 +3,7 @@
 
 
 
-function soldat_username($object) {
+/*function soldat_username($object) {
 
  # dsm($object);
   
@@ -42,7 +42,7 @@ function soldat_username($object) {
   }
 
   return $output;
-}
+}*/
 
 
 
