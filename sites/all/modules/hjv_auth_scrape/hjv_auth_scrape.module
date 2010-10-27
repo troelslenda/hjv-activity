@@ -29,7 +29,9 @@ function hjv_auth_scrape_cron(){
   module_load_include('php', 'hjv_auth_scrape', 'HJVAuthScrape.class');
   module_load_include('php', 'hjv_auth_scrape', 'HJVformatMISC.class');
   
-  $node = hjv_auth_scrap_get_next_activity_for_update();
+  $node = new stdClass();
+  
+  $record = hjv_auth_scrap_get_next_activity_for_update($node);
   
  # $node = node_load($record['aid']);
   
@@ -50,6 +52,7 @@ function hjv_auth_scrape_cron(){
   $curlObj = new HJVAuthScrape($node->field_guid[0]['value']);
   $curlObj->authorize(variable_get('hjv_username','xxxxxx'),variable_get('hjv_password','xxxxxx'));
   
+  
   switch($record['type']){
     case 'activity':
       $activityRAW = $curlObj->getActivityRAW();
@@ -60,9 +63,13 @@ function hjv_auth_scrape_cron(){
       $formatteddata = HJVformatMISC::formatParticipantData($participantsRAW);
       break;
   }
+  
   if(hjv_auth_scrape_update_activity($node,$formatteddata,$record['type'])){
     node_save($node);
-    watchdog('status',t('Activity %name (%type) was updated',array('%name' => $node->title,'%type' => $record['type'])));
+    watchdog('hjv',t('Activity %name[%aid]:%type was updated',array('%name' => $node->title,'%type' => $record['type'],'%aid' => $node->nid)));
+  }
+  else{
+    watchdog('hjv',t('Went for activity %name[%aid]:%type but nothing new',array('%name' => $node->title,'%type' => $record['type'],'%aid' => $node->nid)));
   }
 }
 function hjv_auth_scrape_update_activity(&$node,$ua,$type){
@@ -155,7 +162,7 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
 
 //getNextActivityforUpdate
 
-function hjv_auth_scrap_get_next_activity_for_update(){
+function hjv_auth_scrap_get_next_activity_for_update(&$node){
   $res = db_query('SELECT * FROM {hjv_auth_scrape_queue} WHERE updatetime < UNIX_TIMESTAMP() ORDER BY updatetime ASC LIMIT 0,1');
   $row = db_fetch_array($res);
   $node = node_load($row['aid']);
@@ -175,15 +182,16 @@ function hjv_auth_scrap_get_next_activity_for_update(){
   
    $timestamp = date_convert($node->field_duration[0]['value'], DATE_ISO, DATE_UNIX);
   
-  // the event is not over. Write a new update in queue
-  if($timestamp > time()){
+   
+   // the event is not over. Write a new update in queue
+  if($timestamp > time() || $timestamp == null){
     drupal_write_record('hjv_auth_scrape_queue',$updateFields,$where);
   }
   else{
     db_query('DELETE FROM {hjv_auth_scrape_queue} WHERE aid = '.$row['aid'].' AND type ="'.$row['type'].'"');
     watchdog('hjv','Activity !aid is no longer in queue',array('!aid' => $row['aid']));
   }
-  return $node;
+  return $row;
 }
 function hjv_auth_scrape_update_user_info($arr,$u){
   
