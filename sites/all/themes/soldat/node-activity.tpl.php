@@ -2,7 +2,9 @@
 // $Id: node.tpl.php,v 1.5 2007/10/11 09:51:29 goba Exp $
 ?>
 <div id="node-<?php print $node->nid; ?>" class="node<?php if ($sticky) { print ' sticky'; } ?><?php if (!$status) { print ' node-unpublished'; } ?>">
-
+<?php if($signuplink): ?>
+  <div class="signup-via-hjv.dk"><?php print $signuplink; ?></div>
+<?php endif;?>
 <?php print $picture ?>
 
 <?php if ($page == 0): ?>
@@ -29,5 +31,8 @@
     <?php endif; ?>
   </div>
   <div>Pie chart!</div>
+  <h2>Sidste opdatering af aktiviteten</h2>
+  <div>Aktivitet: <?php print $lastupdate_activity?></div>
+  <div>Deltagere: <?php print $lastupdate_participant?></div>
 
 </div>

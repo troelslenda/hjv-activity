@@ -182,6 +182,33 @@ function hjv_users_block($op = 'list', $delta = 0, $edit = array()) {
   }
 }
 
+function hjv_users_get_signups_for_activity($node){
+  
+  $res = db_query('SELECT uid FROM users WHERE uid != 0');
+  while($row = db_fetch_array($res)){
+    $users[] = $row;
+  }
+  foreach($users as $user){
+    if(!in_array($user,$node->field_attendees)){
+      $not[] = $user;
+    }
+    else{
+      $signed[] = $user;
+    }
+  }
+  foreach($not as $n){
+   if(!in_array($n,$node->field_absentees)){
+      $notsigned[] = $n;
+    }
+    else{
+      $notcomming[] = $n;
+    }
+  }
+  return array(
+    'attendees' => $signed,
+    'absentees' => $notcomming
+  );
+}
 
 
 
