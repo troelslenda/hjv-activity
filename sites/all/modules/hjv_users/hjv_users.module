@@ -197,14 +197,19 @@ function hjv_users_get_signups_for_activity($node){
         $signed[] = $user;
       }
     }
+    else{
+      $not[] = $user;
+    }
   }
-  foreach($not as $n){
-    if(is_array($node->field_absentees)){
-      if(!in_array($n,$node->field_absentees)){
-        $notsigned[] = $n;
-      }
-      else{
-        $notcomming[] = $n;
+  if(is_array($not)){
+    foreach($not as $n){
+      if(is_array($node->field_absentees)){
+        if(!in_array($n,$node->field_absentees)){
+          $notsigned[] = $n;
+        }
+        else{
+          $notcomming[] = $n;
+        }
       }
     }
   }
