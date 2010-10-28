@@ -25,7 +25,7 @@ function soldat_preprocess_node(&$variables) {
   }
   
    // if activity didnt pass and you're not signed up then provide this link
-  if($variables['field_guid'][0]['value'] && (date_convert($variables['field_duration'][0]['value'], DATE_ISO, DATE_UNIX) > time()) && !$variables['responded']){
+  if($variables['field_guid'][0]['value'] && (date_convert($variables['field_duration'][0]['value'], DATE_ISO, DATE_UNIX) > time()) && !$responded){
     $variables['signuplink'] = l(t('Tilmeld dig via hjv.dk'),'http://specmod.hjv.dk/hjv/activities/ActivityDetails.aspx?GUID='.$variables['field_guid'][0]['value']); 
   }
   
