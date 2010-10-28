@@ -74,13 +74,36 @@ function hjv_activity_add_validate($form,&$form_state){
   if(node_load_from_guid($results[0])){
     form_set_error('guid',t('Aktiviteten med GUID=%guid findes allerede i systemet!',array('%guid' => $results[0])));
   }
-  
-
 }
 
 function node_load_from_guid($guid){
   $res = db_query('SELECT nid FROM {content_type_activity} WHERE field_guid_value = "'.$guid.'"');
   return node_load(db_result($res));
+}
+function hjv_activity_form_alter(&$form,&$form_state,$form_id){
+  #var_dump($form_id);
+  if($form_id == 'activity_node_form'){
+    $form['force_update'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Gennemtving opdatering'),
+      '#weight' => 1000,
+      '#decription' => t('Hvis du har brug for at opdatere aktiviteten eller deltagere kan denne boks tjekkes af og aktiviteten og deltagerne opdateres med det samme')
+    );
+    $form['#submit'][] = 'hjv_activity_save_submit';
+  }
+}
+function hjv_activity_save_submit($form,&$form_state){
+  if($form_state['values']['force_update']){
+    $updateFields = array(
+    	'aid' => $form_state['values']['nid'],
+    	'type' => 'activity',
+    	'updatetime' => 100,
+    );
+    $where = array('aid','type');
+    drupal_write_record('hjv_auth_scrape_queue',$updateFields,$where);
+    $updateFields['type'] = 'participant';
+    drupal_write_record('hjv_auth_scrape_queue',$updateFields,$where);
+  }
 }
 
 ?>
