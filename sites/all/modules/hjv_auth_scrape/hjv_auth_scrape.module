@@ -32,16 +32,11 @@ function hjv_auth_scrape_cron(){
   $node = new stdClass();
   
   $record = hjv_auth_scrap_get_next_activity_for_update($node);
-  
- # $node = node_load($record['aid']);
-  
-  
+
   if(!$node){
     watchdog('hjv',t('Nothing to update'));
     return;
   }
-  
-  #var_dump($node);
   
   // validate GUID
   if (!(preg_match('/^[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}$/i', $node->field_guid[0]['value']))) {

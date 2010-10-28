@@ -54,12 +54,7 @@ function hjv_users_menu(){
 }
 
 
-function hjv_auth_scrape_form_alter(&$form,&$form_state,$form_id){
-  #var_dump($form_id);
-  if($form_id != 'activity_node_form'){
-    return;
-  }
-}
+
 
 function hjv_auth_scrape_add_soldiers(){
   
