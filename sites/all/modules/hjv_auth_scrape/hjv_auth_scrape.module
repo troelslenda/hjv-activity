@@ -89,16 +89,15 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
   if($ua['time']){
     list($start,$end) = HJVformatMISC::getStartAndEndTime($ua['time']);
     
-    if($node->field_duration[0]['value'] != $start){
+    if($node->field_duration[0]['value'] != format_date($start,'small','',0)){
       $node->field_duration[0]['value'] = format_date($start,'small','',0);// start time event
       $update = true;  
     }
-    if($node->field_duration[0]['value2'] != $end){
+    if($node->field_duration[0]['value2'] != format_date($end,'small','',0)){
       $node->field_duration[0]['value2'] = format_date($end,'small','',0);// end time event
       $update = true;
     }
   }
-  #var_dump($ua);
   if($type == 'participant'){
     
     #read stored users
