@@ -1,4 +1,4 @@
-// $Id: CHANGELOG.txt,v 1.17.2.5 2010/01/27 22:37:36 davereid Exp $
+// $Id: CHANGELOG.txt,v 1.17.2.7 2010/02/20 23:59:32 sun Exp $
 
 Feedback x.x-x.x, xxxx-xx-xx
 ----------------------------
@@ -6,6 +6,8 @@ Feedback x.x-x.x, xxxx-xx-xx
 
 Feedback 6.x-2.x, xxxx-xx-xx
 ----------------------------
+#387818 by antgiant: Fixed width of feedback textarea.
+#688306 by Berdir: Fixed compatibility with PHP 5.3.
 
 
 Feedback 6.x-2.1, 2010-01-27

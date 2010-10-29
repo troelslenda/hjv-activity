@@ -1,5 +1,5 @@
 <?php
-// $Id: feedback.admin.inc,v 1.1.2.1 2010/01/08 16:57:59 sun Exp $
+// $Id: feedback.admin.inc,v 1.1.2.2 2010/02/20 22:30:53 sun Exp $
 
 /**
  * @file
@@ -63,7 +63,7 @@ function feedback_admin_view_form() {
 /**
  * Output a sortable table containing all feedback entries.
  */
-function theme_feedback_admin_view_form(&$form) {
+function theme_feedback_admin_view_form($form) {
   $output = '';
   foreach (element_children($form['feedback-messages']) as $status) {
     $item = &$form['feedback-messages'][$status];

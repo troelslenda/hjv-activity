@@ -1,5 +1,5 @@
 <?php
-// $Id: feedback.module,v 1.75.2.3 2010/01/27 22:37:36 davereid Exp $
+// $Id: feedback.module,v 1.75.2.4 2010/02/20 23:59:32 sun Exp $
 
 /**
  * @file
@@ -125,6 +125,7 @@ function feedback_form() {
   $form['message'] = array(
     '#type' => 'textarea',
     '#attributes' => array('class' => 'feedback-message'),
+    '#cols' => 20,
     '#title' => t('Message'),
     '#required' => TRUE,
     '#wysiwyg' => FALSE,
