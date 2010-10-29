@@ -40,6 +40,7 @@ function hjv_activity_add_activity_form($form_state){
 function hjv_activity_add_submit($form,&$form_state){
   preg_match('/[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}/i', $form_state['values']['guid'],$results);
   
+  
   $node = new StdClass();
   
   $node->field_guid[0]['value'] = $results[0];
@@ -94,15 +95,15 @@ function hjv_activity_form_alter(&$form,&$form_state,$form_id){
 }
 function hjv_activity_save_submit($form,&$form_state){
   if($form_state['values']['force_update']){
-    $updateFields = array(
+    $insertFields = array(
     	'aid' => $form_state['values']['nid'],
     	'type' => 'activity',
     	'updatetime' => 100,
     );
-    $where = array('aid','type');
-    drupal_write_record('hjv_auth_scrape_queue',$updateFields,$where);
+    db_query('DELETE FROM {hjv_auth_scrape_queue} WHERE aid = %d', $form_state['values']['nid']);
+    drupal_write_record('hjv_auth_scrape_queue',$insertFields);
     $updateFields['type'] = 'participant';
-    drupal_write_record('hjv_auth_scrape_queue',$updateFields,$where);
+    drupal_write_record('hjv_auth_scrape_queue',$insertFields);
   }
 }
 
