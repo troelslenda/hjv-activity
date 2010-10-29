@@ -90,11 +90,11 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
     list($start,$end) = HJVformatMISC::getStartAndEndTime($ua['time']);
     
     if($node->field_duration[0]['value'] != $start){
-      $node->field_duration[0]['value'] = format_date($start,'small');// start time event
+      $node->field_duration[0]['value'] = format_date($start,'small','',0);// start time event
       $update = true;  
     }
     if($node->field_duration[0]['value2'] != $end){
-      $node->field_duration[0]['value2'] = format_date($end,'small');// end time event
+      $node->field_duration[0]['value2'] = format_date($end,'small','',0);// end time event
       $update = true;
     }
   }
