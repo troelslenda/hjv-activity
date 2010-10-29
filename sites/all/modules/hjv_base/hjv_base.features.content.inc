@@ -245,8 +245,8 @@ function hjv_base_content_default_fields() {
         'exclude' => 1,
       ),
       'full' => array(
-        'format' => 'plain',
-        'exclude' => 0,
+        'format' => 'hidden',
+        'exclude' => 1,
       ),
       '4' => array(
         'format' => 'default',
@@ -332,6 +332,55 @@ function hjv_base_content_default_fields() {
     ),
   );
 
+  // Exported field: field_mandatory
+  $fields['activity-field_mandatory'] = array(
+    'field_name' => 'field_mandatory',
+    'type_name' => 'activity',
+    'display_settings' => array(
+      'label' => array(
+        'format' => 'above',
+        'exclude' => 0,
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'number_integer',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'number',
+    'active' => '1',
+    'prefix' => '',
+    'suffix' => '',
+    'min' => '',
+    'max' => '',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'default_value' => array(
+        '0' => array(
+          'value' => NULL,
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Mandatory',
+      'weight' => '39',
+      'description' => 'Kræver aktiviteten at folk giver udsagn hvorvidt de deltager eller ej? Delingsmøde kræver udsagn. En kompagniskydedag gør ikke.',
+      'type' => 'optionwidgets_onoff',
+      'module' => 'optionwidgets',
+    ),
+  );
+
   // Exported field: field_notes
   $fields['activity-field_notes'] = array(
     'field_name' => 'field_notes',
@@ -390,6 +439,7 @@ function hjv_base_content_default_fields() {
   t('Duration');
   t('Goal');
   t('Location');
+  t('Mandatory');
   t('Notes');
   t('guid');
 

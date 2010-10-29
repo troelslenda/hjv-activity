@@ -79,8 +79,9 @@ return theme('table',array('','Employee number','Name','Phone','Username','Unit'
 function hjv_users_block($op = 'list', $delta = 0, $edit = array()) {
   if ($op == 'list') {
     return array(
-    #0 => array('info' => t('Test block'), 'cache' => BLOCK_NO_CACHE),
+    0 => array('info' => t('Test block'), 'cache' => BLOCK_NO_CACHE),
     1 => array('info' => t('Didn\'t signup yet'), 'cache' => BLOCK_NO_CACHE),
+    
     );
   }
   elseif ($op == 'view') {
@@ -89,28 +90,44 @@ function hjv_users_block($op = 'list', $delta = 0, $edit = array()) {
         
         module_load_include('php', 'hjv_auth_scrape', 'HJVformatMISC.class');
         
-        /*$datestr = array('19 OKT 10 1900-2100 ',
-        '05 NOV 10 1900 - 07 NOV 10 1700 ');
+        $datestr = '19 OKT 10 1900 - 2100';
         
-        foreach($datestr as $date){
+        list($start,$end) = HJVformatMISC::getStartAndEndTime($datestr);
+        
+        #$start = date('Y-m-d H:i',$start);
+        #$start = new DateTime($start, new DateTimeZone('Europe/Copenhagen'));
+        
+        #$start = new DateTime($start, date_default_timezone(), DATE_ISO_FORMAT);
+        
+        #$start->setTimezone(new DateTimeZone('GMT'));
+        
+        #print $start->format('d-m-y H:i');
+        
+        
+       # var_dump($start);
+        
+        
+  
+#  print $dateTime->getTimestamp();
 
-          list($start,$end) = HJVformatMISC::getStartAndEndTime($date);
-          
-          $out[]= format_date($start,'long');
-          
-          $out[]= '<hr />';
-          
-          $out[]= format_date($end,'long');
-          
-        }*/
-        #var_dump(serialize(array()));
-      #  variable_set('temp_users',serialize(array()));
-       
-
-        #var_dump($u);
+  
+  
+  
+ # $date = format_date($now,'short');
+  #dsm($date);
+  
+  
+  #echo $dateTime->format("Y-m-d H:i:s");
         
         
-        #var_dump(user_load(array('profile_nanumber' => '367901')));
+        var_dump($start);
+        
+        #var_dump($start);
+        
+        #dsm(date('dmy H:i',$start));
+        
+        dsm($start);
+          
         return $block;  
         break;
       case 1:
