@@ -120,13 +120,13 @@ function hjv_users_block($op = 'list', $delta = 0, $edit = array()) {
   #echo $dateTime->format("Y-m-d H:i:s");
         
         
-        var_dump($start);
+ #       var_dump($start);
         
         #var_dump($start);
         
         #dsm(date('dmy H:i',$start));
         
-        dsm($start);
+  #      dsm($start);
           
         return $block;  
         break;
