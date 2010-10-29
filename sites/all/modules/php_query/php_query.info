@@ -1,0 +1,5 @@
+; $Id$
+name = phpQuery library
+description = Provides phpQuery 0.9.5 library  
+core = 6.x
+php = 5.2
