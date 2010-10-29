@@ -102,7 +102,7 @@ function hjv_activity_save_submit($form,&$form_state){
     );
     db_query('DELETE FROM {hjv_auth_scrape_queue} WHERE aid = %d', $form_state['values']['nid']);
     drupal_write_record('hjv_auth_scrape_queue',$insertFields);
-    $updateFields['type'] = 'participant';
+    $insertFields['type'] = 'participant';
     drupal_write_record('hjv_auth_scrape_queue',$insertFields);
   }
 }
