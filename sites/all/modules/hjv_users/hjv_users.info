@@ -1,5 +1,6 @@
 ; $Id$
 name = HJV.dk Users
-description = Provides blocks and functions to handle users 
+description = Provides blocks and functions to handle users
+package = HJV specific 
 core = 6.x
 php = 5.2

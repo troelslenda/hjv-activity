@@ -3,3 +3,4 @@ name = HJV.dk Authorize and Scrape content
 description = Authorizes on Sharepoint 2003 website to fetch data and participants from activities
 core = 6.x
 php = 5.2
+package = HJV specific 

@@ -14,4 +14,4 @@ features[content][] = "activity-field_location"
 features[content][] = "activity-field_notes"
 features[node][] = "activity"
 name = "hjv_base"
-package = "Features"
+package = HJV specific 

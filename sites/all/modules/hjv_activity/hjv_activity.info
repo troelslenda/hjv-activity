@@ -3,3 +3,4 @@ name = HJV.dk Activities
 description = -
 core = 6.x
 php = 5.2
+package = HJV specific 
