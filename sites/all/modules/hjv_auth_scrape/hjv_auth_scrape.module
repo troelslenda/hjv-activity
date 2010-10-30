@@ -103,6 +103,16 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
     #read stored users
     $stored_users = unserialize(variable_get('temp_users',''));
     
+    
+    /*foreach($node->field_attendees as $attendee){
+      $registered_attendees[] = $attendee['uid'];
+    }
+    foreach($node->field_absentees as $absentee){
+      $registered_absentees[] = $absentee['uid'];
+    }*/
+    
+    #dsm($ua);
+    
     foreach($ua as $person){
       #checkif exists
       $res = db_query('SELECT u.uid FROM profile_fields AS f LEFT JOIN profile_values as v ON f.fid = v.fid LEFT JOIN users as u ON v.uid = u.uid WHERE f.name = "profile_manumber" and v.value = %d',$person['ma_number']);
@@ -111,9 +121,10 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
       if($u){        
         // update user info if nessecary
         hjv_auth_scrape_update_user_info($person,$u);
-        
+
         if($person['signedup'] == 'Tilmeldt'){
-          $exist = false;
+          $attendees[]['uid'] = $u->uid;
+          /*$exist = false;
           foreach($node->field_attendees as $registered){
             if($registered['uid'] == $u->uid){
               //already registered
@@ -122,12 +133,14 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
           }
           if(!$exist){
             $node->field_attendees[]['uid'] = $u->uid;
+            //check wether user exists in absentees
             $update = true;
-          }
+          }*/
         }
         else{
+          $absentees[]['uid'] = $u->uid;
           // signed off absent
-          $exist = false;
+         /* $exist = false;
           foreach($node->field_absentees as $registered){
             if($registered['uid'] == $u->uid){
               //already registered
@@ -136,32 +149,31 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
           }
           if(!$exist){
             $node->field_absentees[]['uid'] = $u->uid;
+            //check wether user exists in attendees
             $update = true;
-          }
+          }*/
         }
       }
       else{
         $stored_users[$person['ma_number']] = $person;
       }
     }
+  #  dsm($aaattendees);
+   # dsm($aaabsentees);
+    $node->field_attendees = $attendees;
+    $node->field_absentees = $absentees;
     variable_set('temp_users',serialize($stored_users));
   }
-  
-  
     
   // always update record when fetched from hjv.dk for testing purposes
   #return true;
   return $update;
 }
 
-//getNextActivityforUpdate
-
 function hjv_auth_scrap_get_next_activity_for_update(&$node){
   $res = db_query('SELECT * FROM {hjv_auth_scrape_queue} WHERE updatetime < UNIX_TIMESTAMP() ORDER BY updatetime ASC LIMIT 0,1');
   $row = db_fetch_array($res);
   $node = node_load($row['aid']);
-  
-  
   if(!$node){
     return;
   }
@@ -172,11 +184,9 @@ function hjv_auth_scrap_get_next_activity_for_update(&$node){
   	'updatetime' => time()+(variable_get('hjv_'.$row['type'].'_update_frequency','')*60*60),
   );
   $where = array('aid','type');
-  # TODO: Only put in queue if the activity didnt pass (data not avalible here)
   
    $timestamp = date_convert($node->field_duration[0]['value'], DATE_ISO, DATE_UNIX);
   
-   
    // the event is not over. Write a new update in queue
   if($timestamp > time() || $timestamp == null){
     drupal_write_record('hjv_auth_scrape_queue',$updateFields,$where);
