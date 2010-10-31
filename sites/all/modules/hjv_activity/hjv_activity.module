@@ -106,5 +106,65 @@ function hjv_activity_save_submit($form,&$form_state){
     drupal_write_record('hjv_auth_scrape_queue',$insertFields);
   }
 }
+function hjv_activity_theme($existing, $type, $theme, $path){  
+  return array(
+    'hjv_member_matrix' => array(
+      'arguments' => array('users' => NULL, 'attendees' => FALSE, 'absentees' => FALSE),
+      #'template' => 'node',
+    ),
+    'hjv_user_line' => array(
+      'arguments' => array('user' => NULL,'status' => ''),
+      #'template' => 'node',
+    ),
+  );
+}
+
+function theme_hjv_user_line($user,$status){
+  return '<div class="'.$status.'"><p class="func">'.$user->profile_function.'</p><p class="name">'.theme('username',$user).'</p></div>';
+}
+
+function theme_hjv_member_matrix($users,$attendees,$absentees){
+  
+  foreach($attendees as $attendee){
+    $cleaned_attendees[] = $attendee['uid'];
+  }
+  foreach($absentees as $absentee){
+    $cleaned_absentees[] = $absentee['uid'];
+  }
+  
+  foreach($users as $u){
+    $user = user_load($u['uid']);
+    if(in_array($u['uid'],$cleaned_attendees)){
+      $status = 'go';
+    }
+    else if(in_array($u['uid'],$cleaned_absentees)){
+      $status = 'nogo';
+    }
+    else{
+      $status = 'dontknow';
+    }
+    if(in_array('1. Gruppe',$user->roles)){
+      $groups[1][] = theme('hjv_user_line',$user,$status);
+    }
+    else if(in_array('2. Gruppe',$user->roles)){
+      $groups[2][] = theme('hjv_user_line',$user,$status);
+    }
+    else if(in_array('3. Gruppe',$user->roles)){
+      $groups[3][] = theme('hjv_user_line',$user,$status);
+    }
+    else{
+      $groups[0][] = theme('hjv_user_line',$user,$status);
+    }
+  }  
+  
+  return '<div class="clear-block stab">'.theme('item_list',$groups[0],t('Ledelse'),'ul',array('class' => 'stab')).'</div>'.
+  theme('item_list',$groups[1],t('1. Gruppe'),'ul',array('class' => 'grp1')).
+  theme('item_list',$groups[2],t('2. Gruppe'),'ul',array('class' => 'grp2')).
+  theme('item_list',$groups[3],t('3. Gruppe'),'ul',array('class' => 'grp3'));
+  
+  
+  
+  
+}
 
 ?>
