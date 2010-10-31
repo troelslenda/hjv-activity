@@ -30,7 +30,7 @@
       <div class="links"><?php print $links; ?></div>
     <?php endif; ?>
   </div>
-  <div>Pie chart!</div>
+  <div class="members clear-block"><?php print $members;?></div>
   <h2>Sidste opdatering af aktiviteten</h2>
   <div>Aktivitet: <?php print $lastupdate_activity?></div>
   <div>Deltagere: <?php print $lastupdate_participant?></div>

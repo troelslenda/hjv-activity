@@ -4,4 +4,5 @@ description = Soldat skabelon
 core = 6.x
 engine = phptemplate
 stylesheets[all][] = styles.css
+stylesheets[all][] = soldat.css
 base theme = garland

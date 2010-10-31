@@ -12,7 +12,7 @@ function soldat_preprocess_node(&$variables) {
   
   
   $signups = hjv_users_get_signups_for_activity(node_load($variables['nid']));
-  $responders = $signups['attendees'];
+  /*$responders = $signups['attendees'];
   if($signups['absentees']){
     $responders = array_merge($responders,$signups['absentees']);
   }
@@ -22,7 +22,10 @@ function soldat_preprocess_node(&$variables) {
         $responded = true;  
       }
     }
-  }
+  }*/
+  
+  $variables['members'] = theme('hjv_member_matrix',$signups['all'],$signups['attendees'],$signups['absentees']);
+  
   
    // if activity didnt pass and you're not signed up then provide this link
   if($variables['field_guid'][0]['value'] && (date_convert($variables['field_duration'][0]['value'], DATE_ISO, DATE_UNIX) > time()) && !$responded){

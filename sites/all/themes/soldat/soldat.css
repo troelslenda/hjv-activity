@@ -1,0 +1,54 @@
+
+
+.members h3{
+  text-align:center;
+}
+
+div.stab div.item-list{
+  margin: 0 auto;
+  float:none;
+}
+
+.members .item-list{
+  width: 33%;
+  margin:0;
+  padding:0;
+  list-style:none;
+  float:left;
+}
+/*.members ul.stab{
+  margin: 0 auto;
+}*/
+/*.members ul.grp1, .members ul.grp2, .members ul.grp3{
+  float:left;
+}*/
+
+.members ul li{
+  margin:5px;
+  padding:0;
+  text-align:center;
+  list-style:none;
+}
+.members ul li div{
+  padding:5px;
+}
+
+.members p{
+  margin:0;  
+}
+.members p.func{
+  font-size:0.8em;
+}
+.members p.name{
+  font-size:1.1em;
+  font-weight:bold;
+}
+.go{
+  background:#9ff394;
+}
+.nogo{
+  background:#f39494;
+}
+.dontknow{
+  background:#c9c9c9;
+}
