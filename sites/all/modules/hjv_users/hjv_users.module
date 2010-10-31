@@ -227,7 +227,8 @@ function hjv_users_get_signups_for_activity($node){
   }
   return array(
     'attendees' => $signed,
-    'absentees' => $notcomming
+    'absentees' => $notcomming,
+    'all' =>  $users,
   );
 }
 
