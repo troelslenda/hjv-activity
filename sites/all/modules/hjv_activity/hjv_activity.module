@@ -125,37 +125,42 @@ function theme_hjv_user_line($user,$status){
 
 function theme_hjv_member_matrix($users,$attendees,$absentees){
   
-  foreach($attendees as $attendee){
-    $cleaned_attendees[] = $attendee['uid'];
+  if(is_array($attendees)){
+    foreach($attendees as $attendee){
+      $cleaned_attendees[] = $attendee['uid'];
+    }
   }
-  foreach($absentees as $absentee){
-    $cleaned_absentees[] = $absentee['uid'];
+  if(is_array($absentees)){
+    foreach($absentees as $absentee){
+      $cleaned_absentees[] = $absentee['uid'];
+    }
   }
-  
-  foreach($users as $u){
-    $user = user_load($u['uid']);
-    if(in_array($u['uid'],$cleaned_attendees)){
-      $status = 'go';
+  if(is_array($users)){
+    foreach($users as $u){
+      $user = user_load($u['uid']);
+      if(@in_array($u['uid'],$cleaned_attendees)){
+        $status = 'go';
+      }
+      else if(@in_array($u['uid'],$cleaned_absentees)){
+        $status = 'nogo';
+      }
+      else{
+        $status = 'dontknow';
+      }
+      if(in_array('1. Gruppe',$user->roles)){
+        $groups[1][] = theme('hjv_user_line',$user,$status);
+      }
+      else if(in_array('2. Gruppe',$user->roles)){
+        $groups[2][] = theme('hjv_user_line',$user,$status);
+      }
+      else if(in_array('3. Gruppe',$user->roles)){
+        $groups[3][] = theme('hjv_user_line',$user,$status);
+      }
+      else{
+        $groups[0][] = theme('hjv_user_line',$user,$status);
+      }
     }
-    else if(in_array($u['uid'],$cleaned_absentees)){
-      $status = 'nogo';
-    }
-    else{
-      $status = 'dontknow';
-    }
-    if(in_array('1. Gruppe',$user->roles)){
-      $groups[1][] = theme('hjv_user_line',$user,$status);
-    }
-    else if(in_array('2. Gruppe',$user->roles)){
-      $groups[2][] = theme('hjv_user_line',$user,$status);
-    }
-    else if(in_array('3. Gruppe',$user->roles)){
-      $groups[3][] = theme('hjv_user_line',$user,$status);
-    }
-    else{
-      $groups[0][] = theme('hjv_user_line',$user,$status);
-    }
-  }  
+  }
   
   return '<div class="clear-block stab">'.theme('item_list',$groups[0],t('Ledelse'),'ul',array('class' => 'stab')).'</div>'.
   theme('item_list',$groups[1],t('1. Gruppe'),'ul',array('class' => 'grp1')).
