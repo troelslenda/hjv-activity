@@ -2,7 +2,6 @@
 
 include_once('hjv_base.features.inc');
 
-
 function hjv_base_footer($main = 0){
   if(user_access('create cases')){
    return '<div class="new-ticket">'.l(t('Er der noget galt? Meld det!'),'node/add/casetracker-basic-case?clean=1',array('attributes' => array('rel' => 'lightmodal'))).'</div>'; 
@@ -17,18 +16,15 @@ function hjv_base_theme() {
         'show_blocks' => TRUE,
         'show_messages' => TRUE,
       ),
-   ),
-
+    ),
   );
 }
-
-
 
 function hjv_base_add_case(){
    return 'en formular til at oprette cases!'; 
    
 }
-
+/*
 function hjv_base_menu(){
     $items['newcase'] = array(
     'page callback' => 'hjv_base_add_case',
@@ -36,11 +32,8 @@ function hjv_base_menu(){
     'access arguments' => array('create cases'),
   );
   return $items;
-}
-
+}*/
 function hjv_base_preprocess_page(&$vars, $hook) {
-  
-  
   
   if(arg(3) == 'stream' || arg(3) == 'download' || $_GET['clean'] == 1 ){
   	$vars['template_files'] = array('page-clean');

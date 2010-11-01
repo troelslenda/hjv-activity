@@ -66,6 +66,7 @@ body .new-ticket{
   background:red;
   color:#fff;
   font-weight:bold;
+  z-index:6;
 }
 body .new-ticket a{
   color:#fff;
