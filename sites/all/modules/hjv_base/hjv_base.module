@@ -1,3 +1,55 @@
 <?php
 
 include_once('hjv_base.features.inc');
+
+
+function hjv_base_footer($main = 0){
+  if(user_access('create cases')){
+   return '<div class="new-ticket">'.l(t('Er der noget galt? Meld det!'),'node/add/casetracker-basic-case?clean=1',array('attributes' => array('rel' => 'lightmodal'))).'</div>'; 
+  }
+}
+function hjv_base_theme() {
+  return array(
+    'page' =>  array(
+      'template' => 'page-clean',
+      'arguments' => array(
+        'content' => NULL,
+        'show_blocks' => TRUE,
+        'show_messages' => TRUE,
+      ),
+   ),
+
+  );
+}
+
+
+
+function hjv_base_add_case(){
+   return 'en formular til at oprette cases!'; 
+   
+}
+
+function hjv_base_menu(){
+    $items['newcase'] = array(
+    'page callback' => 'hjv_base_add_case',
+    'title' => t('Tilføj case'),
+    'access arguments' => array('create cases'),
+  );
+  return $items;
+}
+
+function hjv_base_preprocess_page(&$vars, $hook) {
+  
+  
+  
+  if(arg(3) == 'stream' || arg(3) == 'download' || $_GET['clean'] == 1 ){
+  	$vars['template_files'] = array('page-clean');
+  	#$vars['css']['all']['theme']['sites/all/themes/netsound2/css/style.css'] = false;
+  }
+  //krumo($vars);
+}
+/*function hjv_base_form_alter(&$form, &$form_state, $form_id){
+if($form_id == 'casetracker_basic_case_node_form'){
+
+}*/
+

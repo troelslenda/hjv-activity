@@ -56,3 +56,22 @@ div.stab div.item-list{
   background:#f0f0f0;
   color:#ccc;
 }
+
+body .new-ticket{
+  position:fixed;
+  top:10px;
+  left:10px;
+  display:block;
+  padding:4px;
+  background:red;
+  color:#fff;
+  font-weight:bold;
+}
+body .new-ticket a{
+  color:#fff;
+}
+
+
+#modalContainer{
+  text-align:left;
+}
