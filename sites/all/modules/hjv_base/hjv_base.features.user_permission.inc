@@ -58,20 +58,6 @@ function hjv_base_user_default_permissions() {
     ),
   );
 
-  // Exported permission: access devel information
-  $permissions['access devel information'] = array(
-    'name' => 'access devel information',
-    'roles' => array(),
-  );
-
-  // Exported permission: access feedback form
-  $permissions['access feedback form'] = array(
-    'name' => 'access feedback form',
-    'roles' => array(
-      '0' => 'authenticated user',
-    ),
-  );
-
   // Exported permission: access site reports
   $permissions['access site reports'] = array(
     'name' => 'access site reports',
@@ -113,12 +99,6 @@ function hjv_base_user_default_permissions() {
   // Exported permission: administer content types
   $permissions['administer content types'] = array(
     'name' => 'administer content types',
-    'roles' => array(),
-  );
-
-  // Exported permission: administer features
-  $permissions['administer features'] = array(
-    'name' => 'administer features',
     'roles' => array(),
   );
 
@@ -292,12 +272,6 @@ function hjv_base_user_default_permissions() {
     'roles' => array(),
   );
 
-  // Exported permission: display source code
-  $permissions['display source code'] = array(
-    'name' => 'display source code',
-    'roles' => array(),
-  );
-
   // Exported permission: download original image
   $permissions['download original image'] = array(
     'name' => 'download original image',
@@ -354,21 +328,9 @@ function hjv_base_user_default_permissions() {
     'roles' => array(),
   );
 
-  // Exported permission: execute php code
-  $permissions['execute php code'] = array(
-    'name' => 'execute php code',
-    'roles' => array(),
-  );
-
   // Exported permission: inspect all votes
   $permissions['inspect all votes'] = array(
     'name' => 'inspect all votes',
-    'roles' => array(),
-  );
-
-  // Exported permission: manage features
-  $permissions['manage features'] = array(
-    'name' => 'manage features',
     'roles' => array(),
   );
 
@@ -412,12 +374,6 @@ function hjv_base_user_default_permissions() {
     'roles' => array(),
   );
 
-  // Exported permission: switch users
-  $permissions['switch users'] = array(
-    'name' => 'switch users',
-    'roles' => array(),
-  );
-
   // Exported permission: translate interface
   $permissions['translate interface'] = array(
     'name' => 'translate interface',
@@ -446,14 +402,6 @@ function hjv_base_user_default_permissions() {
   $permissions['view date repeats'] = array(
     'name' => 'view date repeats',
     'roles' => array(),
-  );
-
-  // Exported permission: view feedback messages
-  $permissions['view feedback messages'] = array(
-    'name' => 'view feedback messages',
-    'roles' => array(
-      '0' => 'Befalingsmand',
-    ),
   );
 
   // Exported permission: view files uploaded to comments
