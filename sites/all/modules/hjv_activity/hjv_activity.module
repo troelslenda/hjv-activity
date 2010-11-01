@@ -113,17 +113,23 @@ function hjv_activity_theme($existing, $type, $theme, $path){
       #'template' => 'node',
     ),
     'hjv_user_line' => array(
-      'arguments' => array('user' => NULL,'status' => ''),
+      'arguments' => array('user' => NULL,'function' => '','status' => ''),
       #'template' => 'node',
     ),
   );
 }
 
-function theme_hjv_user_line($user,$status){
-  return '<div class="'.$status.'"><p class="func">'.$user->profile_function.'</p><p class="name">'.theme('username',$user).'</p></div>';
+function theme_hjv_user_line($user,$function,$status){
+  if(!$user){
+    $status = 'nouser';
+  }
+  return '<div class="'.$status.'"><p class="func">'.$function.'</p><p class="name">'.theme('username',$user).'</p></div>';
 }
 
 function theme_hjv_member_matrix($users,$attendees,$absentees){
+  
+  $cleaned_attendees = array();
+  $cleaned_absentees = array();
   
   if(is_array($attendees)){
     foreach($attendees as $attendee){
@@ -135,7 +141,7 @@ function theme_hjv_member_matrix($users,$attendees,$absentees){
       $cleaned_absentees[] = $absentee['uid'];
     }
   }
-  if(is_array($users)){
+ /* if(is_array($users)){
     foreach($users as $u){
       $user = user_load($u['uid']);
       if(@in_array($u['uid'],$cleaned_attendees)){
@@ -160,16 +166,68 @@ function theme_hjv_member_matrix($users,$attendees,$absentees){
         $groups[0][] = theme('hjv_user_line',$user,$status);
       }
     }
+  }*/
+  
+  $base_functions = array(
+    'GF',
+    'NK/GVSK1', 
+    'LMGSK',
+    'LMGHJ',
+    'DYKNSK',
+    'DYKNHJ',
+    'GVSK2/GRNDR',
+    'GVSK3/SYHJ',
+    'LMGSK/KØRER',
+    'KØRER/GVSK/PVSK',
+    /*'UDD/GVSK',
+    'UDD/GVSK',*/
+  );
+  $groups = array(
+    'Ledelse',
+  	'1. Gruppe',
+  	'2. Gruppe',
+  	'3. Gruppe',
+  );
+  
+ /* foreach( as $user){
+    $u[] = user_load($user['uid']);
+  }*/
+  
+  foreach($groups as $group){
+    if($group == 'Ledelse'){
+      $functions = array(
+      	'DF',
+    		'NK',
+  			'SIGBM'
+      );
+      $sgroup = '';
+    }
+    else{
+      $functions = $base_functions;
+      $sgroup = $group;
+    }
+    
+    foreach($functions as $function){
+      $user = hjv_users_load_user_from_group_and_function($function,$sgroup);
+      if(in_array($user->uid,$cleaned_attendees)){
+        $status = 'go';
+      }
+      else if(in_array($user->uid,$cleaned_absentees)){
+        $status = 'nogo';
+      }
+      else{
+        $status = 'dontknow';
+      }
+      $matrix[$group][] = theme('hjv_user_line',$user,$function,$status);
+    }
   }
   
-  return '<div class="clear-block stab">'.theme('item_list',$groups[0],t('Ledelse'),'ul',array('class' => 'stab')).'</div>'.
-  theme('item_list',$groups[1],t('1. Gruppe'),'ul',array('class' => 'grp1')).
-  theme('item_list',$groups[2],t('2. Gruppe'),'ul',array('class' => 'grp2')).
-  theme('item_list',$groups[3],t('3. Gruppe'),'ul',array('class' => 'grp3'));
   
-  
-  
-  
+  return '<div class="clear-block stab">'.theme('item_list',$matrix['Ledelse'],t('Ledelse'),'ul',array('class' => 'stab')).'</div>'.
+  theme('item_list',$matrix['1. Gruppe'],t('1. Gruppe'),'ul',array('class' => 'grp1')).
+  theme('item_list',$matrix['2. Gruppe'],t('2. Gruppe'),'ul',array('class' => 'grp2')).
+  theme('item_list',$matrix['3. Gruppe'],t('3. Gruppe'),'ul',array('class' => 'grp3'));
 }
+
 
 ?>
