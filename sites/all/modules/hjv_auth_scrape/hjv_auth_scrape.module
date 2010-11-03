@@ -60,9 +60,8 @@ function hjv_auth_scrape_cron(){
   }
   
   if(hjv_auth_scrape_update_activity($node,$formatteddata,$record['type'])){
-    $node = node_submit($node);
+    #$node = node_submit($node);
     node_save($node);
-    content_insert($node);
     watchdog('hjv',t('Activity %name[%aid]:%type was updated',array('%name' => $node->title,'%type' => $record['type'],'%aid' => $node->nid)));
   }
   else{
@@ -105,6 +104,10 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
     #read stored users
     #DISABLED NOT USED YET
    # $stored_users = unserialize(variable_get('temp_users',''));
+    unset($node->field_attendees);
+    unset($node->field_absentees);
+    node_save($node);
+    content_insert($node);
     
     foreach($ua as $person){
       #checkif exists
@@ -117,7 +120,7 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
         
         if($person['signedup'] == 'Tilmeldt'){
           $signedup[]['uid'] = $u->uid;
-          $exist = false;
+          /*$exist = false;
           foreach($node->field_attendees as $registered){
             if($registered['uid'] == $u->uid){
               //already registered
@@ -128,12 +131,12 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
             $node->field_attendees[]['uid'] = $u->uid;
             //check wether user exists in absentees
             $update = true;
-          }
+          }*/
         }
         else{
           // signed off absent
           $signedoff[]['uid'] = $u->uid;
-          $exist = false;
+          /*$exist = false;
           foreach($node->field_absentees as $registered){
             if($registered['uid'] == $u->uid){
               //already registered
@@ -144,7 +147,7 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
             $node->field_absentees[]['uid'] = $u->uid;
             //check wether user exists in attendees
             $update = true;
-          }
+          }*/
         }
       }
       #DISABLED NOT USED YET
@@ -155,12 +158,12 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
     $node->field_attendees = $signedup;
     $node->field_absentees = $signedoff;
     
-    var_dump($node);
+    #var_dump($node);
     variable_set('temp_users',serialize($stored_users));
   }
     
   // always update record when fetched from hjv.dk for testing purposes
-  #return true;
+  return true;
   return $update;
 }
 
