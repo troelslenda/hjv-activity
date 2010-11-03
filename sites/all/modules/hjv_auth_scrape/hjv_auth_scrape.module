@@ -60,8 +60,9 @@ function hjv_auth_scrape_cron(){
   }
   
   if(hjv_auth_scrape_update_activity($node,$formatteddata,$record['type'])){
+    $node = node_submit($node);
     node_save($node);
-    //content_insert($node);
+    content_insert($node);
     watchdog('hjv',t('Activity %name[%aid]:%type was updated',array('%name' => $node->title,'%type' => $record['type'],'%aid' => $node->nid)));
   }
   else{
@@ -102,7 +103,8 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
   if($type == 'participant'){
     
     #read stored users
-    $stored_users = unserialize(variable_get('temp_users',''));
+    #DISABLED NOT USED YET
+   # $stored_users = unserialize(variable_get('temp_users',''));
     
     foreach($ua as $person){
       #checkif exists
@@ -145,10 +147,15 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
           }
         }
       }
-      else{
+      #DISABLED NOT USED YET
+     /* else{
         $stored_users[$person['ma_number']] = $person;
-      }
+      }*/
     }
+    $node->field_attendees = $signedup;
+    $node->field_absentees = $signedoff;
+    
+    var_dump($node);
     variable_set('temp_users',serialize($stored_users));
   }
     
@@ -160,10 +167,10 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
 function hjv_auth_scrap_get_next_activity_for_update(&$node){
   $res = db_query('SELECT * FROM {hjv_auth_scrape_queue} WHERE updatetime < UNIX_TIMESTAMP() ORDER BY updatetime ASC LIMIT 0,1');
   $row = db_fetch_array($res);
-  $node = node_load($row['aid']);
-  if(!$node){
+  if(!$row['aid']){
     return;
   }
+  $node = node_load($row['aid']);
   
   $updateFields = array(
   	'aid' => $row['aid'],
@@ -175,7 +182,7 @@ function hjv_auth_scrap_get_next_activity_for_update(&$node){
    $timestamp = date_convert($node->field_duration[0]['value'], DATE_ISO, DATE_UNIX);
   
    // the event is not over. Write a new update in queue
-  if($timestamp > time() || $timestamp == null){
+  if(($timestamp > time() || $timestamp == null) && is_object($node)){
     drupal_write_record('hjv_auth_scrape_queue',$updateFields,$where);
   }
   else{
@@ -189,6 +196,8 @@ function hjv_auth_scrape_update_user_info($arr,$u){
   #$u->mail = $arr['mail'];
   user_save($u);
   $data['profile_function'] = $arr['function'];
+  #TODO check wether data for all properties is changed
+  //$data['profile_callsign'] = $u->profile_field['callsign']; 
   $data['profile_manumber'] = $arr['ma_number'];
   user_save($u, $data, 'Soldier Info');
   $data['profile_fullname'] = $arr['name'];
