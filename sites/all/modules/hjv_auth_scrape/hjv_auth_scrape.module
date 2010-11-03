@@ -61,6 +61,7 @@ function hjv_auth_scrape_cron(){
   
   if(hjv_auth_scrape_update_activity($node,$formatteddata,$record['type'])){
     node_save($node);
+    //content_insert($node);
     watchdog('hjv',t('Activity %name[%aid]:%type was updated',array('%name' => $node->title,'%type' => $record['type'],'%aid' => $node->nid)));
   }
   else{
@@ -113,6 +114,7 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
         hjv_auth_scrape_update_user_info($person,$u);
         
         if($person['signedup'] == 'Tilmeldt'){
+          $signedup[]['uid'] = $u->uid;
           $exist = false;
           foreach($node->field_attendees as $registered){
             if($registered['uid'] == $u->uid){
@@ -128,6 +130,7 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
         }
         else{
           // signed off absent
+          $signedoff[]['uid'] = $u->uid;
           $exist = false;
           foreach($node->field_absentees as $registered){
             if($registered['uid'] == $u->uid){
