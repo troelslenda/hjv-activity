@@ -20,7 +20,10 @@ function hjv_auth_scrape_menu(){
  * implementation of hook_cron();
  */
 function hjv_auth_scrape_cron(){
-  
+  hjv_auth_scrape_fetch_hjv();
+}
+
+function hjv_auth_scrape_fetch_hjv(){
   if(variable_get('hjv_username','xxxxxx') == 'xxxxxx' || variable_get('hjv_password','xxxxxx') == 'xxxxxx'){
     watchdog('error',t('You need to set Employee number and password inorder for cron to run'));
     return;
@@ -33,7 +36,7 @@ function hjv_auth_scrape_cron(){
   
   $record = hjv_auth_scrap_get_next_activity_for_update($node);
 
-  if(!$node){
+  if(!$node->nid){
     watchdog('hjv',t('Nothing to update'));
     return;
   }
@@ -68,6 +71,7 @@ function hjv_auth_scrape_cron(){
     watchdog('hjv',t('Went for activity %name[%aid]:%type but nothing new',array('%name' => $node->title,'%type' => $record['type'],'%aid' => $node->nid)));
   }
 }
+
 function hjv_auth_scrape_update_activity(&$node,$ua,$type){
   $update = false;
   if($node->title != $ua['title'] && $ua['title']){
