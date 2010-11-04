@@ -201,11 +201,11 @@ function hjv_auth_scrap_get_next_activity_for_update(&$node){
 }
 function hjv_auth_scrape_update_user_info($arr,$u){
   
-  #$u->mail = $arr['mail'];
-  user_save($u);
+  $usr['mail'] = $arr['mail'];
+  user_save($u,$usr);
   $data['profile_function'] = $arr['function'];
   #TODO check wether data for all properties is changed
-  //$data['profile_callsign'] = $u->profile_field['callsign']; 
+  $data['profile_callsign'] = $u->profile_callsign; 
   $data['profile_manumber'] = $arr['ma_number'];
   user_save($u, $data, 'Soldier Info');
   $data['profile_fullname'] = $arr['name'];
