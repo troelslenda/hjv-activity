@@ -42,6 +42,8 @@ class HJVformatMISC{
     $line['signupbefore'] = trim($xml->tr[2]->td[1]->span);
     $line['location'] = trim($xml->tr[3]->td[1]->span);
     $line['description'] = trim($xml->tr[6]->td[1]->span);
+    $line['text'] = trim($xml->tr[7]->td[1]->span);
+    $line['authority'] = trim($xml->tr[2]->td[1]->span);
     $line['notes'] = trim($xml->tr[8]->td[1]->span);
     $line['duration'] = trim($xml->tr[11]->td[1]->span);
     
