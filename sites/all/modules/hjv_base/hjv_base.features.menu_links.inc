@@ -29,7 +29,7 @@ function hjv_base_menu_default_menu_links() {
     'menu_name' => 'primary-links',
     'link_path' => 'calendar',
     'router_path' => 'calendar',
-    'link_title' => 'Aktivitets kalender',
+    'link_title' => 'Aktivitetskalender',
     'options' => array(
       'attributes' => array(
         'title' => '',
@@ -47,7 +47,7 @@ function hjv_base_menu_default_menu_links() {
     'menu_name' => 'primary-links',
     'link_path' => 'userlist',
     'router_path' => 'userlist',
-    'link_title' => 'Medlems Overblik',
+    'link_title' => 'Medlemsoverblik',
     'options' => array(
       'attributes' => array(
         'title' => '',
@@ -63,8 +63,8 @@ function hjv_base_menu_default_menu_links() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Aktiviteter');
-  t('Aktivitets kalender');
-  t('Medlems Overblik');
+  t('Aktivitetskalender');
+  t('Medlemsoverblik');
 
 
   return $menu_links;

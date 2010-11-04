@@ -88,12 +88,13 @@ function hjv_base_strongarm() {
   $strongarm->name = 'content_extra_weights_activity';
   $strongarm->value = array(
     'title' => '32',
-    'revision_information' => '43',
-    'author' => '42',
-    'options' => '44',
-    'comment_settings' => '45',
-    'menu' => '40',
-    'attachments' => '41',
+    'revision_information' => '44',
+    'author' => '43',
+    'options' => '45',
+    'comment_settings' => '46',
+    'menu' => '41',
+    'path' => '30',
+    'attachments' => '42',
   );
 
   $export['content_extra_weights_activity'] = $strongarm;

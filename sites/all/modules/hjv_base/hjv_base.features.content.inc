@@ -11,7 +11,7 @@ function hjv_base_content_default_fields() {
     'field_name' => 'field_absentees',
     'type_name' => 'activity',
     'display_settings' => array(
-      'weight' => '38',
+      'weight' => '39',
       'parent' => '',
       'label' => array(
         'format' => 'above',
@@ -22,7 +22,7 @@ function hjv_base_content_default_fields() {
       ),
       'full' => array(
         'format' => 'default',
-        'exclude' => 0,
+        'exclude' => 1,
       ),
       '4' => array(
         'format' => 'default',
@@ -52,8 +52,8 @@ function hjv_base_content_default_fields() {
         ),
       ),
       'default_value_php' => NULL,
-      'label' => 'Absentees',
-      'weight' => '38',
+      'label' => 'Fraværende',
+      'weight' => '39',
       'description' => '',
       'type' => 'userreference_autocomplete',
       'module' => 'userreference',
@@ -65,7 +65,7 @@ function hjv_base_content_default_fields() {
     'field_name' => 'field_attendees',
     'type_name' => 'activity',
     'display_settings' => array(
-      'weight' => '37',
+      'weight' => '38',
       'parent' => '',
       'label' => array(
         'format' => 'above',
@@ -76,7 +76,7 @@ function hjv_base_content_default_fields() {
       ),
       'full' => array(
         'format' => 'default',
-        'exclude' => 0,
+        'exclude' => 1,
       ),
       '4' => array(
         'format' => 'default',
@@ -110,11 +110,66 @@ function hjv_base_content_default_fields() {
         ),
       ),
       'default_value_php' => NULL,
-      'label' => 'Attendees',
-      'weight' => '37',
+      'label' => 'Deltagere',
+      'weight' => '38',
       'description' => '',
       'type' => 'userreference_autocomplete',
       'module' => 'userreference',
+    ),
+  );
+
+  // Exported field: field_description
+  $fields['activity-field_description'] = array(
+    'field_name' => 'field_description',
+    'type_name' => 'activity',
+    'display_settings' => array(
+      'weight' => '35',
+      'parent' => '',
+      'label' => array(
+        'format' => 'above',
+      ),
+      'teaser' => array(
+        'format' => 'default',
+        'exclude' => 1,
+      ),
+      'full' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      '4' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+      'token' => array(
+        'format' => 'default',
+        'exclude' => 0,
+      ),
+    ),
+    'widget_active' => '1',
+    'type' => 'text',
+    'required' => '0',
+    'multiple' => '0',
+    'module' => 'text',
+    'active' => '1',
+    'text_processing' => '1',
+    'max_length' => '',
+    'allowed_values' => '',
+    'allowed_values_php' => '',
+    'widget' => array(
+      'rows' => '5',
+      'size' => 60,
+      'default_value' => array(
+        '0' => array(
+          'value' => '',
+          '_error_element' => 'default_value_widget][field_description][0][value',
+        ),
+      ),
+      'default_value_php' => NULL,
+      'label' => 'Beskrivelse',
+      'weight' => '35',
+      'description' => '',
+      'type' => 'text_textarea',
+      'module' => 'text',
     ),
   );
 
@@ -171,7 +226,7 @@ function hjv_base_content_default_fields() {
       'text_parts' => array(),
       'year_range' => '-1:+1',
       'label_position' => 'none',
-      'label' => 'Duration',
+      'label' => 'Varighed',
       'weight' => '33',
       'description' => '',
       'type' => 'date_select',
@@ -222,7 +277,7 @@ function hjv_base_content_default_fields() {
         ),
       ),
       'default_value_php' => NULL,
-      'label' => 'Goal',
+      'label' => 'Aktivitetens mål',
       'weight' => '34',
       'description' => '',
       'type' => 'text_textarea',
@@ -286,7 +341,7 @@ function hjv_base_content_default_fields() {
     'field_name' => 'field_location',
     'type_name' => 'activity',
     'display_settings' => array(
-      'weight' => '36',
+      'weight' => '37',
       'parent' => '',
       'label' => array(
         'format' => 'inline',
@@ -325,7 +380,7 @@ function hjv_base_content_default_fields() {
       ),
       'default_value_php' => NULL,
       'label' => 'Location',
-      'weight' => '36',
+      'weight' => '37',
       'description' => '',
       'type' => 'text_textfield',
       'module' => 'text',
@@ -337,9 +392,10 @@ function hjv_base_content_default_fields() {
     'field_name' => 'field_mandatory',
     'type_name' => 'activity',
     'display_settings' => array(
+      'weight' => '40',
+      'parent' => '',
       'label' => array(
         'format' => 'above',
-        'exclude' => 0,
       ),
       'teaser' => array(
         'format' => 'default',
@@ -374,7 +430,7 @@ function hjv_base_content_default_fields() {
       ),
       'default_value_php' => NULL,
       'label' => 'Mandatory',
-      'weight' => '39',
+      'weight' => '40',
       'description' => 'Kræver aktiviteten at folk giver udsagn hvorvidt de deltager eller ej? Delingsmøde kræver udsagn. En kompagniskydedag gør ikke.',
       'type' => 'optionwidgets_onoff',
       'module' => 'optionwidgets',
@@ -386,7 +442,7 @@ function hjv_base_content_default_fields() {
     'field_name' => 'field_notes',
     'type_name' => 'activity',
     'display_settings' => array(
-      'weight' => '35',
+      'weight' => '36',
       'parent' => '',
       'label' => array(
         'format' => 'above',
@@ -425,7 +481,7 @@ function hjv_base_content_default_fields() {
       ),
       'default_value_php' => NULL,
       'label' => 'Notes',
-      'weight' => '35',
+      'weight' => '36',
       'description' => '',
       'type' => 'text_textarea',
       'module' => 'text',
@@ -434,13 +490,14 @@ function hjv_base_content_default_fields() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Absentees');
-  t('Attendees');
-  t('Duration');
-  t('Goal');
+  t('Aktivitetens mål');
+  t('Beskrivelse');
+  t('Deltagere');
+  t('Fraværende');
   t('Location');
   t('Mandatory');
   t('Notes');
+  t('Varighed');
   t('guid');
 
   return $fields;
