@@ -112,6 +112,7 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
     unset($node->field_absentees);
     node_save($node);
     content_insert($node);
+    $update = true;
     
     foreach($ua as $person){
       #checkif exists
@@ -167,7 +168,7 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
   }
     
   // always update record when fetched from hjv.dk for testing purposes
-  return true;
+ # return true;
   return $update;
 }
 
