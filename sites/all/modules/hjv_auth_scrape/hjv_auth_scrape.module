@@ -87,8 +87,8 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
     $node->field_notes[0]['value'] = $ua['notes'];
     $update = true;  
   }
-  if($node->field_description[0]['value'] != $ua['description'] && $ua['description']){
-    $node->field_description[0]['value'] = $ua['description'];
+  if($node->field_description[0]['value'] != $ua['text'] && $ua['text']){
+    $node->field_description[0]['value'] = $ua['text'];
     $update = true;  
   }
  
