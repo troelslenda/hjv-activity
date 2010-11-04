@@ -74,6 +74,7 @@ function hjv_auth_scrape_fetch_hjv(){
 
 function hjv_auth_scrape_update_activity(&$node,$ua,$type){
   $update = false;
+   
   if($node->title != $ua['title'] && $ua['title']){
     $node->title = $ua['title'];
     $update = true;
@@ -86,6 +87,11 @@ function hjv_auth_scrape_update_activity(&$node,$ua,$type){
     $node->field_notes[0]['value'] = $ua['notes'];
     $update = true;  
   }
+  if($node->field_description[0]['value'] != $ua['description'] && $ua['description']){
+    $node->field_description[0]['value'] = $ua['description'];
+    $update = true;  
+  }
+ 
   if($node->field_location[0]['value'] != $ua['location'] && $ua['location']){
     $node->field_location[0]['value'] = $ua['location'];
     $update = true;  
