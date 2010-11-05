@@ -2,11 +2,39 @@
 
 function hjv_activity_menu(){
     $items['addguid'] = array(
-    'page callback' => 'hjv_activity_add_activity_from_guid',
-    'title' => t('Add activity tracker'),
-    'access arguments' => array('create activity content'),
-  );
+      'page callback' => 'hjv_activity_add_activity_from_guid',
+      'title' => t('Add activity tracker'),
+      'access arguments' => array('create activity content'),
+    );
+    $items['node/%node/reset_activity'] = array(
+      'page callback' => 'hjv_activity_reset_activity',
+      'page arguments' => array(1),
+      'title' => t('Hent deltagere'),
+      'type' => MENU_LOCAL_TASK,
+      'access arguments' => array('create activity content'),
+    );
   return $items;
+}
+function hjv_activity_reset_activity($node){
+  if($node->type != 'activity'){
+    drupal_set_message(t('Det var ikke en aktivitet'),'error');
+    drupal_goto('node/'.$node->nid);
+    return;
+  }
+  
+  $insertFields = array(
+  	'aid' => $node->nid,
+  	'type' => 'participant',
+  	'updatetime' => 100,
+  );
+  
+  db_query('DELETE FROM {hjv_auth_scrape_queue} WHERE aid = %d AND type = "%s"', $node->nid,$insertFields['type']);
+  drupal_write_record('hjv_auth_scrape_queue',$insertFields);
+    
+  hjv_auth_scrape_fetch_hjv();
+  drupal_set_message(t('Aktiviteten er opdateret!'));
+  drupal_goto('node/'.$node->nid);
+ # return $nid;
 }
 
 function hjv_activity_add_activity_from_guid(){
@@ -229,5 +257,24 @@ function theme_hjv_member_matrix($users,$attendees,$absentees){
   theme('item_list',$matrix['3. Gruppe'],t('3. Gruppe'),'ul',array('class' => 'grp3'));
 }
 
+
+function hjv_activity_block($op = 'list', $delta = 0, $edit = array()) {
+  if ($op == 'list') {
+    return array(
+    0 => array('info' => t('Reset activity'), 'cache' => BLOCK_NO_CACHE),
+    
+    );
+  }
+  elseif ($op == 'view') {
+    switch ($delta) {
+      case 0:
+        $block['content'] = l(t('Reset aktivitet'),'reset/'.arg(1));
+        return $block;  
+        break;
+
+        
+    }
+  }
+}
 
 ?>
