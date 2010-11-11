@@ -4,26 +4,8 @@
 function soldat_preprocess_node(&$variables) {
 
   global $user;
-  
-  #var_dump($variables);
-  
  
-  
-  
-  
   $signups = hjv_users_get_signups_for_activity(node_load($variables['nid']));
-  /*$responders = $signups['attendees'];
-  if($signups['absentees']){
-    $responders = array_merge($responders,$signups['absentees']);
-  }
-  if(is_array($responders)){
-    foreach($responders as $responder){
-      if($responder['uid'] == $user->uid){
-        $responded = true;  
-      }
-    }
-  }*/
-  
   $variables['members'] = theme('hjv_member_matrix',$signups['all'],$signups['attendees'],$signups['absentees']);
   
   
@@ -32,12 +14,14 @@ function soldat_preprocess_node(&$variables) {
     $variables['signuplink'] = l(t('Tilmeld dig via hjv.dk'),'http://specmod.hjv.dk/hjv/activities/ActivityDetails.aspx?GUID='.$variables['field_guid'][0]['value']); 
   }
   
-  $tzdiff = 200000000;
+  
+  #$tzdiff = 200000000;
   $res = db_query('SELECT * FROM {hjv_auth_scrape_queue} WHERE aid = %d',$variables['nid']);
   while($row = db_fetch_array($res)){
     $time = ($row['updatetime']-(variable_get('hjv_'.$row['type'].'_update_frequency','')*60*60));
     $variables['lastupdate_'.$row['type']] = date('dmY H:i',$time).'  |  '.format_interval(time()-$time);
   }
+  $variables['updatelink'] = l(t('Opdater deltagere'),'node/%node/reset');
   
   
    

@@ -5,6 +5,8 @@
 <?php if($signuplink): ?>
   <div class="signup-via-hjv.dk"><?php print $signuplink; ?></div>
 <?php endif;?>
+<div class="last_updated"><?php print $lastupdate_activity?><?php print $lastupdate_participant ?><?php print $updatelink?></div>
+
 <?php print $picture ?>
 
 <?php if ($page == 0): ?>
