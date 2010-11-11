@@ -19,9 +19,9 @@ function soldat_preprocess_node(&$variables) {
   $res = db_query('SELECT * FROM {hjv_auth_scrape_queue} WHERE aid = %d',$variables['nid']);
   while($row = db_fetch_array($res)){
     $time = ($row['updatetime']-(variable_get('hjv_'.$row['type'].'_update_frequency','')*60*60));
-    $variables['lastupdate_'.$row['type']] = date('dmY H:i',$time).'  |  '.format_interval(time()-$time);
+    $variables['lastupdate_'.$row['type']] = format_interval(time()-$time);
   }
-  $variables['updatelink'] = l(t('Opdater deltagere'),'node/%node/reset');
+  $variables['updatelink'] = l(t('Opdater deltagere'),'node/'.$variables['nid'].'/reset');
   
   
    
