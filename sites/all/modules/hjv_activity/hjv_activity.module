@@ -10,7 +10,7 @@ function hjv_activity_menu(){
       'page callback' => 'hjv_activity_reset_activity',
       'page arguments' => array(1),
       'title' => t('Hent deltagere'),
-      'type' => MENU_LOCAL_TASK,
+      #'type' => MENU_LOCAL_TASK,
       'access arguments' => array('create activity content'),
     );
   return $items;
