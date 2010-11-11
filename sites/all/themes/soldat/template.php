@@ -21,7 +21,11 @@ function soldat_preprocess_node(&$variables) {
     $time = ($row['updatetime']-(variable_get('hjv_'.$row['type'].'_update_frequency','')*60*60));
     $variables['lastupdate_'.$row['type']] = format_interval(time()-$time);
   }
-  $variables['updatelink'] = l(t('Opdater deltagere'),'node/'.$variables['nid'].'/reset');
+  
+  if ((preg_match('/[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}/i', $variables['field_guid'][0]['value'],$results))) {
+    $variables['updatelink'] = l(t('Opdater deltagere'),'node/'.$variables['nid'].'/reset'); 
+  }
+  
   
   
    
