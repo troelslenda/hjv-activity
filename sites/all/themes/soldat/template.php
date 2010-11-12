@@ -23,7 +23,7 @@ function soldat_preprocess_node(&$variables) {
   }
   
   if ((preg_match('/[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}/i', $variables['field_guid'][0]['value'],$results))) {
-    $variables['updatelink'] = l(t('Opdater deltagere'),'node/'.$variables['nid'].'/reset'); 
+    $variables['updatelink'] = l(t('Opdater deltagere'),'node/'.$variables['nid'].'/reset_activity'); 
   }
   
   
