@@ -1,0 +1,12 @@
+<?php
+
+// $Id: jwplayermodule.install,v 1.2 2010/04/16 17:59:47 longtailvideo Exp $
+
+/**
+ * Implementation of hook_uninstall().
+ * @file Contains the uninstallation method for the module.
+ */
+function jwplayermodule_uninstall() {
+  variable_del(LONGTAIL_KEY . CONFIG);
+  variable_del(LONGTAIL_KEY . SUBMIT);
+}

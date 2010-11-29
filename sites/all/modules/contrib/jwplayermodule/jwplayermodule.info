@@ -1,0 +1,11 @@
+; $Id: jwplayermodule.info,v 1.1 2010/04/08 20:52:19 longtailvideo Exp $
+name = JW Player Module
+description = Embed a JW Player for Flash in your Nodes. 
+package = "Media"
+core = 6.x
+; Information added by drupal.org packaging script on 2010-04-16
+version = "6.x-1.1"
+core = "6.x"
+project = "jwplayermodule"
+datestamp = "1271442614"
+
