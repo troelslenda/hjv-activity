@@ -116,3 +116,6 @@ body .new-ticket a{
 	-moz-border-radius:20px;
 	padding:10px;
 }
+#wrapper #container {
+  max-width:970px;
+}
