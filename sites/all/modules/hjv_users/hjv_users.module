@@ -234,6 +234,22 @@ function hjv_users_get_signups_for_activity($node){
   );
 }
 
+function hjv_users_get_signups_for_activity_responders($node){
+  $responders = array();
+  $signups = hjv_users_get_signups_for_activity($node);
+  if(is_array($signups['attendees'])){
+    foreach ($signups['attendees'] as $attendee){
+      $responders[] = $attendee['uid'];
+    }
+  } 
+  if(is_array($signups['absentees'])){
+    foreach ($signups['absentees'] as $absentee){
+      $responders[] = $absentee['uid'];
+    }
+  }
+  return $responders;
+}
+
 function hjv_users_load_user_from_group_and_function($function,$group = null){
   $res = db_query('SELECT uid FROM {users}');
   while($user = user_load(db_result($res))){

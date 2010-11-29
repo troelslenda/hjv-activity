@@ -3,14 +3,24 @@
 
 function soldat_preprocess_node(&$variables) {
 
-  global $user;
- 
-  $signups = hjv_users_get_signups_for_activity(node_load($variables['nid']));
+  $node = node_load($variables['nid']);
+  
+  $signups = hjv_users_get_signups_for_activity($node);
   $variables['members'] = theme('hjv_member_matrix',$signups['all'],$signups['attendees'],$signups['absentees']);
   
   
+  #dpm(hjv_users_get_signups_for_activity_responders($node));
+  $signuptext = t('Tilmeld dig via hjv.dk');
+  if(is_array($signups['absentees'])){
+    foreach($signups['absentees'] as $absentee){
+      if($absentee['uid'] == $user->uid){
+        $signuptext = t('Afmeld aktiviteten via hjv.dk');
+      }
+    }
+  }
+  
    // if activity didnt pass and you're not signed up then provide this link
-  if($variables['field_guid'][0]['value'] && (date_convert($variables['field_duration'][0]['value'], DATE_ISO, DATE_UNIX) > time()) && !$responded){
+  if($variables['field_guid'][0]['value'] && (date_convert($variables['field_duration'][0]['value'], DATE_ISO, DATE_UNIX) > time())){
     $variables['signuplink'] = l(t('Tilmeld dig via hjv.dk'),'http://specmod.hjv.dk/hjv/activities/ActivityDetails.aspx?GUID='.$variables['field_guid'][0]['value']); 
   }
   
@@ -19,7 +29,7 @@ function soldat_preprocess_node(&$variables) {
   $res = db_query('SELECT * FROM {hjv_auth_scrape_queue} WHERE aid = %d',$variables['nid']);
   while($row = db_fetch_array($res)){
     $time = ($row['updatetime']-(variable_get('hjv_'.$row['type'].'_update_frequency','')*60*60));
-    $variables['lastupdate_'.$row['type']] = format_interval(time()-$time);
+    $variables['lastupdate_'.$row['type']] = format_interval(time()-$time,1);
   }
   
   if ((preg_match('/[A-Z0-9]{8}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{12}/i', $variables['field_guid'][0]['value'],$results))) {

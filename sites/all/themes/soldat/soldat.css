@@ -78,3 +78,41 @@ body .new-ticket a{
 #modalContainer{
   text-align:left;
 }
+
+.floatright{
+  float:right;
+}
+.box{
+  width:168px;
+  padding:5px;
+  border:2px solid red;
+  -moz-border-radius:4px;
+}
+
+.badge{
+  background:red;
+  padding-top:4px;
+  -moz-border-radius:4px;
+  margin-right:4px;
+  color:#fff;
+  height:22px;
+  width:25px;
+  text-align:center;
+  font-weight:bold;
+  font-size:0.7em;
+  line-height:1;
+  float:left;
+}
+.updatelink{
+  margin-top:2px;
+}
+
+.content-area .block{
+	width:24.99%;
+	float:left;
+	border:3px solid #fff;
+	-mox-box-shadow:#000 2px 2px 2px;
+	background:olivedrab;
+	-moz-border-radius:20px;
+	padding:10px;
+}
