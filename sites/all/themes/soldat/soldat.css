@@ -82,7 +82,7 @@ body .new-ticket a{
 .floatright{
   float:right;
 }
-.box{
+.smallbox{
   width:168px;
   padding:5px;
   border:2px solid red;
