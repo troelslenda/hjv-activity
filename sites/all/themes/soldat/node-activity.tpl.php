@@ -5,7 +5,7 @@
 <div class="smallbox floatright">
   <h2>Opdatering:</h2>
   <div class="badge lastupdate_act" title="<?php print t('Aktivitetsinformation blev opdateret for !time siden',array('!time' => $lastupdate_activity ));?>"><?php print $lastupdate_activity; ?></div>
-  <div class="badge lastupdate_part" title="<?php print t('Deltagerinformation blev opdateret for !time siden',array('!time' => $lastupdate_participant ));?>"><?php print $lastupdate_activity; ?></div>
+  <div class="badge lastupdate_part" title="<?php print t('Deltagerinformation blev opdateret for !time siden',array('!time' => $lastupdate_participant ));?>"><?php print $lastupdate_participant; ?></div>
   <div class="updatelink"><?php print $updatelink?></div>
 </div>
 <?php if($signuplink): ?>
