@@ -12,7 +12,7 @@ div.stab div.item-list{
 }
 
 .members .item-list{
-  width: 33%;
+  width: 33.33%;
   margin:0;
   padding:0;
   list-style:none;
@@ -24,9 +24,12 @@ div.stab div.item-list{
 /*.members ul.grp1, .members ul.grp2, .members ul.grp3{
   float:left;
 }*/
+.members ul{
+  margin:0;
+}
 
 .members ul li{
-  margin:5px;
+  margin:3px;
   padding:0;
   text-align:center;
   list-style:none;
@@ -107,7 +110,7 @@ body .new-ticket a{
   margin-top:2px;
 }
 
-.content-area .block{
+/*.content-area .block{
 	width:24.99%;
 	float:left;
 	border:3px solid #fff;
@@ -115,7 +118,44 @@ body .new-ticket a{
 	background:olivedrab;
 	-moz-border-radius:20px;
 	padding:10px;
-}
+}*/
 #wrapper #container {
   max-width:970px;
+}
+
+
+.blockscontainer .pane-title{
+  text-align:center;
+}
+
+.blockscontainer .panel-pane{
+  width:24.99%;
+	float:left;
+}
+.blockscontainer .panel-pane .pane-content{
+  margin:0 5px;
+  background: #98ad73;
+  border:2px solid #6A9915;
+  color:#fff;
+  padding:10px;
+  -moz-border-radius:10px;
+}
+.blockscontainer .panel-pane .pane-content ul{
+  padding:0;
+  margin:0;  
+}
+.blockscontainer .panel-pane .pane-content li{
+  background:none;
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+.blockscontainer .panel-pane .pane-content .date-display-single,
+.blockscontainer .panel-pane .pane-content .views-field-created,
+.blockscontainer .panel-pane .pane-content .views-field-timestamp{
+  font-size:0.8em;
+  color:#c0c0c0;
+}
+.blockscontainer .panel-pane .pane-content a{
+  color:#fff;
 }
