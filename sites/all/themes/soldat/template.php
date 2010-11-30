@@ -8,20 +8,19 @@ function soldat_preprocess_node(&$variables) {
   $signups = hjv_users_get_signups_for_activity($node);
   $variables['members'] = theme('hjv_member_matrix',$signups['all'],$signups['attendees'],$signups['absentees']);
   
-  
-  #dpm(hjv_users_get_signups_for_activity_responders($node));
   $signuptext = t('Tilmeld dig via hjv.dk');
   if(is_array($signups['absentees'])){
+    $signuptext = t('Afmeld aktiviteten via hjv.dk');
     foreach($signups['absentees'] as $absentee){
       if($absentee['uid'] == $user->uid){
-        $signuptext = t('Afmeld aktiviteten via hjv.dk');
+        $signuptext = t('Tilmeld aktiviteten via hjv.dk');
       }
     }
   }
   
    // if activity didnt pass and you're not signed up then provide this link
   if($variables['field_guid'][0]['value'] && (date_convert($variables['field_duration'][0]['value'], DATE_ISO, DATE_UNIX) > time())){
-    $variables['signuplink'] = l(t('Tilmeld dig via hjv.dk'),'http://specmod.hjv.dk/hjv/activities/ActivityDetails.aspx?GUID='.$variables['field_guid'][0]['value']); 
+    $variables['signuplink'] = l($signuptext,'http://specmod.hjv.dk/hjv/activities/ActivityDetails.aspx?GUID='.$variables['field_guid'][0]['value']); 
   }
   
   
